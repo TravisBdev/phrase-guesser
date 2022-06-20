@@ -24,6 +24,8 @@ class Game {
     return this.phrases[randomPhrase].phrase;
   }
 
+
+
   startGame(){
    ul.innerHTML = '';
    for(let i = 0; i < keys.length; i++){
@@ -31,12 +33,57 @@ class Game {
     keys[i].disabled = false;
    }
    for(let i = 0; i < lives.length; i++){
-    this.missed = 0;
-    overlay.style.display = 'none';
-    this.activePhrase = new Phrase(this.getRandomPhrase());
-    this.activePhrase.addPhraseToDisplay();
+    lives[i].firstChild.src = 'images/liveHeart.png'
    }
+   this.missed = 0;
+   overlay.style.display = 'none';
+   this.activePhrase = new Phrase(this.getRandomPhrase());
+   this.activePhrase.addPhraseToDisplay();
   }
+
+
+
+  checkForWin(){
+    let checkForLetters = 0;
+    for(let i = 0; i < ul.children.length; i++){
+      if(ul.children[i].className.includes('hide')){
+        checkForLetters++;
+      }
+    }
+    if(checkForLetters === 0){
+      return true;
+    }
+  }
+
+
+
+  removeLife(){
+    this.missed += 1;
+    let numOfLives = lives.length - this.missed;
+    if(this.missed < 5){
+      lives[numOfLives].firstChild.src = 'images/lostHeart.png';
+    }else {
+      this.gameOver(false);
+    }
+  }
+
+
+
+  gameOver(gameWon){
+    let message = document.querySelector('#game-over-message');
+     if(gameWon){
+       overlay.style.disply = 'initial';
+       overlay.className = 'win';
+       message.innerHTML = 'Yay! You did it! Congrats!';
+     }else{
+       overlay.style.display = 'initial';
+       overlay.className = 'lose';
+       message.innerHTML = 'Sorry. Better luck next time';
+     }
+     
+   }
+
+
 
   handleInteraction(button){
     button.disabled = true;
@@ -51,48 +98,12 @@ class Game {
     button.className += 'wrong';
     this.removeLife();
   }
-  }
+ }
 
-  removeLife(){
-    this.missed += 1;
-    let numOfLives = lives.length - this.missed;
-    if(this.missed < 5){
-      lives[numOfLives].firstChild.src = 'images/lostHeart.png';
-    }else {
-      this.gameOver(false);
-    }
-  }
 
-  checkForWin(){
-    let checkForLetters = 0;
-    for(let i = 0; i < ul.children.length; i++){
-      if(ul.children[i].className.includes('hide')){
-        checkForLetters++;
-      }
-    }
-    if(checkForLetters === 0){
-      return true;
-    }
-  }
 
-  gameOver(gameWon){
-   let message = document.querySelector('#game-over-message');
-    if(gameWon){
-      overlay.style.disply = 'initial';
-      overlay.className = 'win';
-      message.innerHTML = 'Yay! You did it! Congrats!';
-    }else{
-      overlay.style.display = 'initial';
-      overlay.className = 'lose';
-      message.innerHTML = 'Sorry. Better luck next time';
-    }
-    
-  }
 
   resetGame(){
-    // let lives = document.querySelectorAll('.tries');
-    // let keys = document.querySelectorAll('.key');
-
     ul.innerHTML = '';
     keys.forEach(button => {
       button.classList.remove('wrong');

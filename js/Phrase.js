@@ -12,7 +12,7 @@ class Phrase {
   }
 
   addPhraseToDisplay(){
-    ul.innerHTML = ''
+    ul.innerHTML = '';
     let letters = this.phrase.split('');
     letters.forEach((letter) => {
       if(letter === ' '){
