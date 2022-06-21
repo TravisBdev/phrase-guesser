@@ -1,120 +1,91 @@
 // Author: Travis Brown
-/* Treehouse FSJS Techdegree
- * Project 4 - OOP Game App
- * Game.js */
-const overlay = document.querySelector('#overlay');
-const lives = document.querySelectorAll('.tries');
-
 
 class Game {
-  constructor(){
-    this.missed = 0;
-    this.phrases = [
-      new Phrase('Few word do trick'),
-      new Phrase('Look closer it is worth it'),
-      new Phrase('Kevin spilled the chili'),
-      new Phrase('Life is what you make it'),
-      new Phrase('It happens')
-    ];
-    this.activePhrase = null;
-  }
+    constructor(missed,phrases,activePhrase){
+    this.missed = 0,
+    this.phrases = [ 
+        new Phrase("Kevin spilled the chili"),
+        new Phrase("Trust me I am lying"),
+        new Phrase("To infinity and beyond"),
+        new Phrase("Few word do trick"),
+        new Phrase("Anxiety at the disco")
 
-  getRandomPhrase(){
-    let randomPhrase = Math.floor(Math.random() * this.phrases.length)
-    return this.phrases[randomPhrase].phrase;
-  }
+    ]
+    this.activePhrase = null
+    }
 
-
-
+// starts a new instance of the game
   startGame(){
-   ul.innerHTML = '';
-   for(let i = 0; i < keys.length; i++){
-    keys[i].className = 'key';
-    keys[i].disabled = false;
-   }
-   for(let i = 0; i < lives.length; i++){
-    lives[i].firstChild.src = 'images/liveHeart.png'
-   }
-   this.missed = 0;
-   overlay.style.display = 'none';
-   this.activePhrase = new Phrase(this.getRandomPhrase());
-   this.activePhrase.addPhraseToDisplay();
-  }
-
-
-
-  checkForWin(){
-    let checkForLetters = 0;
-    for(let i = 0; i < ul.children.length; i++){
-      if(ul.children[i].className.includes('hide')){
-        checkForLetters++;
-      }
+        const overlay = document.querySelector("#overlay");
+        overlay.style.display = 'none';
+        this.activePhrase = this.getRandomPhrase();
+       this.activePhrase.addPhraseToDisplay();
     }
-    if(checkForLetters === 0){
-      return true;
+
+// selects a phrase randomly from the list
+    getRandomPhrase(){
+        const randomNum = Math.floor(Math.random() * (this.phrases.length))
+        return this.phrases[randomNum]
     }
-  }
 
-
-
-  removeLife(){
-    this.missed += 1;
-    let numOfLives = lives.length - this.missed;
-    if(this.missed < 5){
-      lives[numOfLives].firstChild.src = 'images/lostHeart.png';
-    }else {
-      this.gameOver(false);
-    }
-  }
-
-
-
-  gameOver(gameWon){
-    let message = document.querySelector('#game-over-message');
-     if(gameWon){
-       overlay.style.disply = 'initial';
-       overlay.className = 'win';
-       message.innerHTML = 'Yay! You did it! Congrats!';
-     }else{
-       overlay.style.display = 'initial';
-       overlay.className = 'lose';
-       message.innerHTML = 'Sorry. Better luck next time';
-     }
-     
-   }
-
-
-
-  handleInteraction(button){
-    button.disabled = true;
-    if(this.activePhrase.phrase.includes(button.innerHTML)){
-      button.className += 'chosen';
-      this.activePhrase.showMatchedLetter(button.innerHTML);
     
-    if (this.checkForWin()) {
-      this.gameOver(true);
-    };
-  }else{
-    button.className += 'wrong';
-    this.removeLife();
-  }
- }
+//Controls game logic. Checks to see if the selection matches a letter in the phrase
+    handleInteraction(selection){
 
+          selection.setAttribute("disabled",'');
+          if(this.activePhrase.phrase.includes(selection.textContent)){
+              selection.className = 'chosen';
+              this.activePhrase.showMatchedLetter(selection.textContent);
+              this.checkForWin();
+              if (this.checkForWin() === true){
+                  this.gameOver();
+              }
+          }
+          else {
+              selection.className = 'wrong';
+              this.removeLife();
+        }
 
+// removes a heart icon whenever an incorrect guess is made
+      }
+    removeLife() {
+        let lives = document.querySelectorAll("img");
+        if(this.missed < 4){
+        lives[this.missed].src = "images/lostHeart.png"
+        this.missed += 1;
+        }
+        else {
+            this.gameOver();
+        }
+    }
+// checks for equality between the phrase and guess
+    checkForWin() {
+        const phrase = this.activePhrase.phrase.replace(/ /g,"").length;
+        const guess = document.querySelectorAll('.letter.show').length;
+        if (phrase === guess){
+            return true
+        }
+        else{
+            return false
+        }
+    }
+//displays appropriate overlay depending on the outcome of the game
+    gameOver() {
+        const overlay = document.querySelector("#overlay");
+        overlay.style.display = '';
 
+        if (this.missed === 4 && this.checkForWin() === false) {
+            let text = document.querySelector("h1");
+            text.textContent = "Sorry! Please Try Again.";
+            text.className = "lose-message";
+            overlay.className = 'lose';           
+        }
+        else {
+            overlay.className = 'win';
+            let text = document.querySelector("h1");
+            text.className = "win-message";
+            text.textContent = "Yay! You did it! Congrats";
 
-  resetGame(){
-    ul.innerHTML = '';
-    keys.forEach(button => {
-      button.classList.remove('wrong');
-      button.classList.remove('chosen');
-      button.disabled = false;
-    })
-    lives.forEach(life => {
-      life.src = 'images/liveHeart.png'
-    })
-  }
-
-
-
+        }
+    }
 }

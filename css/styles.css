@@ -8,9 +8,9 @@
   --color-lose: #D94545;
   --color-start: #5b85b7;
   --color-neutral: #445069;
-  --color-neutral-light: #D2D2D2;
+  --color-neutral-light: #c17ef8;
   --color-keys: #37474F;
-  --color-keys-light: #E5E5E5;
+  --color-keys-light: #c5c0c0;
   --font-size-large: 60px;
   --font-size-medium: 20px;
   --transition: all .2s ease-in-out;
@@ -110,7 +110,7 @@ button {
 
 
 .show {
-  color: #fff;
+  color: rgb(255, 255, 255);
   background-color: #4ac0d5;
   font-size: 20px;
   height: 65px;
@@ -166,7 +166,7 @@ button {
   display: flex;
   flex-direction: column;
   position: fixed;
-  color: #FFFFFF;
+  color: #55a6f1;
   justify-content: center;
   top: 0;
   bottom: 0;
