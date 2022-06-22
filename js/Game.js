@@ -5,7 +5,7 @@ class Game {
     this.missed = 0,
     this.phrases = [ 
         new Phrase("Kevin spilled the chili"),
-        new Phrase("Trust me I am lying"),
+        new Phrase("bears beets battlestar galactica"),
         new Phrase("To infinity and beyond"),
         new Phrase("Few word do trick"),
         new Phrase("Anxiety at the disco")
